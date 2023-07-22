@@ -18,3 +18,15 @@ variable "azure_tenant_id" {
   type        = string
   description = "Azure Tenant ID"
 }
+
+# Linux VM Admin User
+variable "azure_linux_admin_password" {
+  type        = string
+  description = "Linux VM Admin User"
+}
+
+# Linux VM Admin Password
+variable "azure_linux_admin_user" {
+  type        = string
+  description = "Linux VM Admin Password"
+}

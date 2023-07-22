@@ -119,7 +119,7 @@ data "aws_ami" "ubuntu-18_04" {
 
 # Create Elastic IP for web server
 resource "aws_eip" "aws-web-eip" {
-  vpc = true
+  domain = "vpc"  # Use domain attribute instead of the deprecated vpc argument
   tags = {
     Name = "${var.app_name}-${var.app_environment}-elastic-ip"
     Environment = var.app_environment

@@ -16,14 +16,14 @@ variable "gcp_project" {
 variable "gcp_region" {
   type        = string
   description = "GCP region"
-  default     = "northamerica-northeast1"
+  default     = "northamerica-northeast2"
 }
 
 # Define GCP zone
 variable "gcp_zone" {
   type        = string
   description = "GCP zone"
-  default     = "northamerica-northeast1-a"
+  default     = "northamerica-northeast2-c"
 }
 
 # Define subnet CIDR

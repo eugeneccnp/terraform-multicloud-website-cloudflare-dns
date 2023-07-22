@@ -21,20 +21,6 @@ variable "azure_subnet_cidr" {
   default     = ["10.2.1.0/24"]
 }
 
-# Linux VM Admin User
-variable "linux_admin_user" {
-  type        = string
-  description = "Linux VM Admin User"
-  default     = "tfadmin"
-}
-
-# Linux VM Admin Password
-variable "linux_admin_password" {
-  type        = string
-  description = "Linux VM Admin Password"
-  default     = "S3cr3tP@ssw0rd"
-}
-
 # Linux VM Hostname
 variable "linux_vm_hostname" {
   type        = string

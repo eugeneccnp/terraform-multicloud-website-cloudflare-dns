@@ -1,12 +1,6 @@
 #Configure the Azure Provider
 provider "azurerm" {
   features {}
-  skip_provider_registration = true
-  environment     = "public"
-  subscription_id = var.azure_subscription_id
-  client_id       = var.azure_client_id
-  client_secret   = var.azure_client_secret
-  tenant_id       = var.azure_tenant_id
 }
 
 #Create Resource Group
@@ -134,8 +128,8 @@ resource "azurerm_virtual_machine" "azure-web-vm" {
 
   os_profile {
     computer_name  = var.linux_vm_hostname
-    admin_username = var.linux_admin_user
-    admin_password = var.linux_admin_password
+    admin_username = var.azure_linux_admin_user
+    admin_password = var.azure_linux_admin_password
     custom_data    = file("azure-user-data.sh")
   }
 

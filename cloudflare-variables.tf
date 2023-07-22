@@ -17,3 +17,9 @@ variable "cloudflare_zone_id" {
   type        = string
   description = "Cloudflare Zone ID"
 }
+
+# Cloudflare account id
+variable "cloudflare_account_id" {
+  type        = string
+  description = "Cloudflare Zone ID"
+}

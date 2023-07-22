@@ -9,7 +9,6 @@ terraform {
 }
 # Define Cloudflare provider
 provider "cloudflare" {
-  version = "~> 4.0"
   email   = var.cloudflare_email
   api_key = var.cloudflare_api_key
 }
@@ -73,6 +72,68 @@ resource "cloudflare_record" "gcp-root" {
   proxied    = true
   depends_on = [google_compute_address.gcp-web-ip]
 }
+
+
+resource "cloudflare_load_balancer" "example" {
+  zone_id          = var.cloudflare_zone_id
+  name             = cloudflare_record.aws-root.hostname
+  fallback_pool_id = cloudflare_load_balancer_pool.example.id
+  default_pool_ids = [cloudflare_load_balancer_pool.example.id]
+  description      = "example load balancer"
+  proxied          = true
+}
+
+resource "cloudflare_load_balancer_pool" "example" {
+  account_id = var.cloudflare_account_id
+  name = "example-lb-pool"
+  check_regions = ["ENAM"]
+  monitor = cloudflare_load_balancer_monitor.example.id
+  origins {
+    name    = "aws"
+    address = aws_eip.aws-web-eip.public_ip
+    enabled = true
+
+  }
+  origins {
+    name    = "azure"
+    address = azurerm_public_ip.azure-web-ip.ip_address
+    enabled = true
+
+  }
+  origins {
+    name    = "gcp"
+    address = google_compute_address.gcp-web-ip.address
+    enabled = true
+
+  }
+  description        = "example load balancer pool"
+  enabled            = true
+  minimum_origins    = 1
+  notification_email = "eugeneccnp@gmail.com"
+  origin_steering {
+    policy = "random"
+  }
+}
+
+resource "cloudflare_load_balancer_monitor" "example" {
+  account_id     = var.cloudflare_account_id
+  type           = "http"
+  expected_codes = "200"
+  method         = "GET"
+  timeout        = 5
+  path           = "/"
+  port           = 80
+  interval       = 60
+  retries        = 2
+  description    = "example http load balancer"
+  header {
+    header = "Host"
+    values = ["eugeneccnp.com"]
+  }
+  allow_insecure   = false
+  follow_redirects = false
+}
+
 
 # Output AWS
 output "cloudflare-aws-www-record-id" {

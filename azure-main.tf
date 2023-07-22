@@ -1,5 +1,7 @@
 #Configure the Azure Provider
-provider "azurerm" { 
+provider "azurerm" {
+  features {}
+  skip_provider_registration = true
   environment     = "public"
   subscription_id = var.azure_subscription_id
   client_id       = var.azure_client_id
@@ -19,7 +21,7 @@ resource "azurerm_virtual_network" "azure-vnet" {
   resource_group_name = azurerm_resource_group.azure-rg.name
   location            = var.rg_location
   address_space       = [var.azure_vnet_cidr]
-  tags = { 
+  tags = {
     environment = var.app_environment
   }
 }
@@ -29,7 +31,7 @@ resource "azurerm_subnet" "azure-subnet" {
   name                 = "${var.app_name}-${var.app_environment}-subnet"
   resource_group_name  = azurerm_resource_group.azure-rg.name
   virtual_network_name = azurerm_virtual_network.azure-vnet.name
-  address_prefix       = var.azure_subnet_cidr
+  address_prefixes       = var.azure_subnet_cidr
 }
 
 #Create Security Group to access Web Server
@@ -80,8 +82,8 @@ resource "azurerm_public_ip" "azure-web-ip" {
   location            = azurerm_resource_group.azure-rg.location
   resource_group_name = azurerm_resource_group.azure-rg.name
   allocation_method   = "Static"
-  
-  tags = { 
+
+  tags = {
     environment = var.app_environment
   }
 }
@@ -91,16 +93,16 @@ resource "azurerm_network_interface" "azure-web-nic" {
   name                      = "${var.app_name}-${var.app_environment}-web-nic"
   location                  = azurerm_resource_group.azure-rg.location
   resource_group_name       = azurerm_resource_group.azure-rg.name
-  network_security_group_id = azurerm_network_security_group.azure-web-nsg.id
 
   ip_configuration {
     name                          = "internal"
     subnet_id                     = azurerm_subnet.azure-subnet.id
     private_ip_address_allocation = "Dynamic"
     public_ip_address_id          = azurerm_public_ip.azure-web-ip.id
+
   }
 
-  tags = { 
+  tags = {
     environment = var.app_environment
   }
 }
@@ -115,9 +117,10 @@ resource "azurerm_virtual_machine" "azure-web-vm" {
   delete_os_disk_on_termination = true
   delete_data_disks_on_termination = true
 
+
   storage_image_reference {
     publisher = var.ubuntu-linux-publisher
-    offer     = var.ubuntu-linux-offer  
+    offer     = var.ubuntu-linux-offer
     sku       = var.ubuntu-linux-18-sku
     version   = "latest"
   }

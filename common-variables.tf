@@ -4,7 +4,7 @@
 variable "app_name" {
   type = string
   description = "Application name"
-  default = "kopicloud"
+  default = "eugeneccnp"
 }
 
 # Define application environment

@@ -20,14 +20,14 @@ variable "aws_key_pair" {
 variable "aws_region" {
   type = string
   description = "AWS Region for the VPC"
-  default = "eu-west-1"
+  default = "ca-central-1"
 }
 
 # AWS AZ
 variable "aws_az" {
   type = string
   description = "AWS AZ"
-  default = "eu-west-1c"
+  default = "ca-central-1a"
 }
 
 # VPC Variable

@@ -4,7 +4,7 @@
 variable "rg_location" {
   type        = string
   description = "Location of Resource Group"
-  default     = "West Europe"
+  default     = "Canada Central"
 }
 
 # Vnet CIDR
@@ -16,9 +16,9 @@ variable "azure_vnet_cidr" {
 
 # Subnet CIDR
 variable "azure_subnet_cidr" {
-  type        = string
+  type    = list(string)
   description = "Subnet CIDR"
-  default     = "10.2.1.0/24"
+  default     = ["10.2.1.0/24"]
 }
 
 # Linux VM Admin User

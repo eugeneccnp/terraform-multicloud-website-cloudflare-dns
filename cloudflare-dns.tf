@@ -1,8 +1,15 @@
 # cloudflare-dns.tf | Define cloudflare provider and create DNS records
-
+terraform {
+  required_providers {
+    cloudflare = {
+      source  = "cloudflare/cloudflare"
+      version = "~> 4.0"
+    }
+  }
+}
 # Define Cloudflare provider
 provider "cloudflare" {
-  version = "~> 2.0"
+  version = "~> 4.0"
   email   = var.cloudflare_email
   api_key = var.cloudflare_api_key
 }

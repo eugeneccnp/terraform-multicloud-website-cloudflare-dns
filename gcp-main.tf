@@ -35,6 +35,7 @@ resource "google_compute_firewall" "gcp-allow-http" {
     protocol = "tcp"
     ports    = ["80"]
   }
+  source_ranges = ["0.0.0.0/0"]  # Allow traffic from any IP address
   target_tags = ["http"] 
 }
 
@@ -46,6 +47,7 @@ resource "google_compute_firewall" "gcp-allow-ssh" {
     protocol = "tcp"
     ports    = ["22"]
   }
+  source_ranges = ["0.0.0.0/0"]  # Allow traffic from any IP address
   target_tags = ["ssh"]
 }
 
@@ -70,7 +72,7 @@ resource "google_compute_instance" "gpc-web-server" {
 
   boot_disk {
     initialize_params {
-      image = "ubuntu-os-cloud/ubuntu-1804-lts"
+      image = "ubuntu-os-cloud/ubuntu-minimal-2304-lunar-arm64-v20230714"
     }
   }
 

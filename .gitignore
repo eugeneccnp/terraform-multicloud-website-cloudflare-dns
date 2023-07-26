@@ -10,3 +10,5 @@
 
 # GCP json auth file
 *.json
+
+terraform.tfvars*

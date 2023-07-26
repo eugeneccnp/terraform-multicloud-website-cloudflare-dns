@@ -6,6 +6,12 @@ variable "cloudflare_email" {
   description = "Cloudflare Email Address"
 }
 
+# Cloudflare health check notification email
+variable "cloudflare_notification_email" {
+  type        = string
+  description = "Cloudflare health check notification Email Address"
+}
+
 # Cloudflare API key
 variable "cloudflare_api_key" {
   type        = string

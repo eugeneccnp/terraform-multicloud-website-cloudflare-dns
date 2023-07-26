@@ -74,20 +74,20 @@ resource "cloudflare_record" "gcp-root" {
 }
 
 
-resource "cloudflare_load_balancer" "example" {
+resource "cloudflare_load_balancer" "demo_lb" {
   zone_id          = var.cloudflare_zone_id
   name             = cloudflare_record.aws-root.hostname
-  fallback_pool_id = cloudflare_load_balancer_pool.example.id
-  default_pool_ids = [cloudflare_load_balancer_pool.example.id]
-  description      = "example load balancer"
+  fallback_pool_id = cloudflare_load_balancer_pool.demo_lb.id
+  default_pool_ids = [cloudflare_load_balancer_pool.demo_lb.id]
+  description      = "demo_lb load balancer"
   proxied          = true
 }
 
-resource "cloudflare_load_balancer_pool" "example" {
+resource "cloudflare_load_balancer_pool" "demo_lb" {
   account_id = var.cloudflare_account_id
-  name = "example-lb-pool"
+  name = "demo-lb-pool"
   check_regions = ["ENAM"]
-  monitor = cloudflare_load_balancer_monitor.example.id
+  monitor = cloudflare_load_balancer_monitor.demo_lb.id
   origins {
     name    = "aws"
     address = aws_eip.aws-web-eip.public_ip
@@ -106,16 +106,16 @@ resource "cloudflare_load_balancer_pool" "example" {
     enabled = true
 
   }
-  description        = "example load balancer pool"
+  description        = "demo load balancer pool"
   enabled            = true
   minimum_origins    = 1
-  notification_email = "eugeneccnp@gmail.com"
+  notification_email = var.cloudflare_notification_email
   origin_steering {
     policy = "random"
   }
 }
 
-resource "cloudflare_load_balancer_monitor" "example" {
+resource "cloudflare_load_balancer_monitor" "demo_lb" {
   account_id     = var.cloudflare_account_id
   type           = "http"
   expected_codes = "200"
@@ -125,10 +125,10 @@ resource "cloudflare_load_balancer_monitor" "example" {
   port           = 80
   interval       = 60
   retries        = 2
-  description    = "example http load balancer"
+  description    = "demo http load balancer"
   header {
     header = "Host"
-    values = ["eugeneccnp.com"]
+    values = [cloudflare_record.aws-root.hostname]
   }
   allow_insecure   = false
   follow_redirects = false

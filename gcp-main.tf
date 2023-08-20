@@ -12,6 +12,14 @@ provider "google" {
   zone        = var.gcp_zone
 }
 
+# Define bootstrap file
+data "template_file" "gcp_user_data" {
+    template = file("gcp-user-data.sh")
+    vars = {
+    s3bucket = var.s3bucket
+  }
+}
+
 # Create VPC
 resource "google_compute_network" "gcp-vpc" {
   name                    = "${var.app_name}-${var.app_environment}-vpc"
@@ -47,7 +55,7 @@ resource "google_compute_firewall" "gcp-allow-ssh" {
     protocol = "tcp"
     ports    = ["22"]
   }
-  source_ranges = ["0.0.0.0/0"]  # Allow traffic from any IP address
+  source_ranges = [var.ssh_source]  # Allow traffic from a specific subnet
   target_tags = ["ssh"]
 }
 
@@ -56,11 +64,6 @@ resource "google_compute_address" "gcp-web-ip" {
   name    = "${var.app_name}-${var.app_environment}-web-ip"
   project = var.gcp_project
   region  = var.gcp_region
-}
-
-# Define bootstrap file
-data "template_file" "metadata_startup_script" {
-    template = file("gcp-user-data.sh")
 }
 
 # Create VM for web server
@@ -76,7 +79,7 @@ resource "google_compute_instance" "gpc-web-server" {
     }
   }
 
-  metadata_startup_script = data.template_file.metadata_startup_script.rendered
+  metadata_startup_script = data.template_file.gcp_user_data.rendered
 
   network_interface {
     network    = google_compute_network.gcp-vpc.name
@@ -84,6 +87,12 @@ resource "google_compute_instance" "gpc-web-server" {
     access_config {
       nat_ip = google_compute_address.gcp-web-ip.address
     }
+  }
+  #https://app.snyk.io/org/eugeneccnp/project/37d0aa26-6749-4c8f-bda3-79727fc861ed
+  shielded_instance_config {
+    enable_secure_boot = true
+    enable_vtpm = true
+    enable_integrity_monitoring = true
   }
 }
 

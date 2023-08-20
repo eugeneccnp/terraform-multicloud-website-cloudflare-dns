@@ -3,6 +3,14 @@ provider "azurerm" {
   features {}
 }
 
+# Define bootstrap file
+data "template_file" "azure_user_data" {
+  template = file("azure-user-data.sh")
+    vars = {
+    s3bucket = var.s3bucket
+  }
+}
+
 #Create Resource Group
 resource "azurerm_resource_group" "azure-rg" {
   name = "${var.app_name}-${var.app_environment}-rg"
@@ -56,7 +64,7 @@ resource "azurerm_network_security_group" "azure-web-nsg" {
     protocol                   = "Tcp"
     source_port_range          = "*"
     destination_port_range     = "22"
-    source_address_prefix      = "Internet"
+    source_address_prefix      =  var.ssh_source
     destination_address_prefix = "*"
   }
   tags = {
@@ -130,8 +138,9 @@ resource "azurerm_virtual_machine" "azure-web-vm" {
     computer_name  = var.linux_vm_hostname
     admin_username = var.azure_linux_admin_user
     admin_password = var.azure_linux_admin_password
-    custom_data    = file("azure-user-data.sh")
+     custom_data = data.template_file.azure_user_data.rendered
   }
+
 
   os_profile_linux_config {
     disable_password_authentication = false

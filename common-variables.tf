@@ -13,3 +13,16 @@ variable "app_environment" {
   description = "Application environment"
   default = "demo"
 }
+
+# Disable Firewall public access
+variable "ssh_source" {
+  type        = string
+  description = "Disable Firewall public access"
+  default     = "0.0.0.0/0"
+}
+
+# AWS s3 bucket
+variable "s3bucket" {
+  type        = string
+  description = "AWS s3bucket"
+}

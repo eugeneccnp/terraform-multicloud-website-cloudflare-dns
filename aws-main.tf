@@ -7,6 +7,14 @@ provider "aws" {
   region = var.aws_region
 }
 
+# Define bootstrap file
+data "template_file" "aws_user_data" {
+  template = file("aws-user-data.sh")
+    vars = {
+    s3bucket = var.s3bucket
+  }
+}
+
 # Create the VPC
 resource "aws_vpc" "aws-vpc" {
   cidr_block = var.aws_vpc_cidr
@@ -92,7 +100,7 @@ resource "aws_security_group" "aws-ssh-sg" {
     from_port = 22
     to_port = 22
     protocol = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = [var.ssh_source]
   }
 
   tags = {
@@ -135,7 +143,7 @@ resource "aws_instance" "aws-web-server" {
   associate_public_ip_address = true
   source_dest_check = false
   key_name = var.aws_key_pair
-  user_data = file("aws-user-data.sh")
+  user_data = data.template_file.aws_user_data.rendered
   tags = {
     Name = "${var.app_name}-${var.app_environment}-web-server"
     Environment = var.app_environment

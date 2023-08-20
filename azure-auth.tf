@@ -30,4 +30,3 @@ variable "azure_linux_admin_user" {
   type        = string
   description = "Linux VM Admin Password"
 }
-

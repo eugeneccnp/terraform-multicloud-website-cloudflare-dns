@@ -11,7 +11,8 @@ provider "aws" {
 data "template_file" "aws_user_data" {
   template = file("aws-user-data.sh")
     vars = {
-    s3bucket = var.s3bucket
+      s3bucket = var.s3bucket
+      aws_logo = var.aws_logo
   }
 }
 

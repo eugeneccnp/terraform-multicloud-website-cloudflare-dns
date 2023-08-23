@@ -16,7 +16,8 @@ provider "google" {
 data "template_file" "gcp_user_data" {
     template = file("gcp-user-data.sh")
     vars = {
-    s3bucket = var.s3bucket
+      s3bucket = var.s3bucket
+      gcp_logo = var.gcp_logo
   }
 }
 

@@ -7,7 +7,9 @@ provider "azurerm" {
 data "template_file" "azure_user_data" {
   template = file("azure-user-data.sh")
     vars = {
-    s3bucket = var.s3bucket
+      s3bucket = var.s3bucket
+      azure_logo = var.azure_logo
+
   }
 }
 

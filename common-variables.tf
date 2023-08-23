@@ -26,3 +26,21 @@ variable "s3bucket" {
   type        = string
   description = "AWS s3bucket"
 }
+
+# aws logo
+variable "aws_logo" {
+  type        = string
+  description = "hosted on AWS logo used in resume demo"
+}
+
+# azure logo
+variable "azure_logo" {
+  type        = string
+  description = "hosted on azure logo used in resume demo"
+}
+
+# gcp logo
+variable "gcp_logo" {
+  type        = string
+  description = "hosted on gcp logo used in resume demo"
+}

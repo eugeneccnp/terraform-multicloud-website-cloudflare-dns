@@ -12,3 +12,4 @@
 *.json
 
 terraform.tfvars*
+.terraform.lock.hcl

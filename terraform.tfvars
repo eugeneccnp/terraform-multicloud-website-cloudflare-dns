@@ -1,27 +1,30 @@
 # AWS  variables
-aws_access_key = "your-aws-access-key"
-aws_secret_key = "your-aws-secret-key"
-aws_key_pair   = "your-aws-key-pair"
+aws_access_key = "your-aws_access_key"
+aws_secret_key = "your-aws_secret_key"
+aws_key_pair = "your-aws_key_pair"
 
 # Azure  variables
-azure_subscription_id      = "your-azure-subscription-id"
-azure_client_id            = "your-azure-client-id"
-azure_client_secret        = "your-azure-client-secret"
-azure_tenant_id            = "your-azure-tenant-id"
-azure_linux_admin_password = "your-azure-linux-admin-password"
-azure_linux_admin_user     = "your-azure-linux-admin-user"
+azure_subscription_id = "your-azure_subscription_id"
+azure_client_id = "your-azure_client_id"
+azure_client_secret = "your-azure_client_secret"
+azure_tenant_id = "your-azure_tenant_id"
+azure_linux_admin_user = "your-azure_linux_admin_user"
+azure_linux_admin_password = "your-azure_linux_admin_password"
 
 # GCP  variables
-gcp_project   = "your-gcp-project"
-gcp_auth_file = "your-gcp-auth-file.json"
+gcp_project = "your-gcp_project"
+gcp_auth_file = "your-gcp_auth_file"
 
 # Cloudflare  variables
-cloudflare_email   = "your@email-address.com"
-cloudflare_api_key = "your-cloudflare-api-key"
-cloudflare_zone_id = "your-cloudflare-zone-id"
-cloudflare_account_id = "your-cloudflare-account-id"
-cloudflare_notification_email = "your-cloudflare-notification-email"
+cloudflare_email = "your-cloudflare_email"
+cloudflare_api_key = "your-cloudflare_api_key"
+cloudflare_zone_id = "your-cloudflare_zone_id"
+cloudflare_account_id = "your-cloudflare_account_id"
+cloudflare_notification_email = "your-cloudflare_notification_email"
 
 # Common variables
-ssh_source = "your-IP-address"
-s3bucket = "your-s3bucket-object-url"
+ssh_source = "your-ssh_source"
+s3bucket = "your-s3bucket"
+aws_logo = "your-aws_logo"
+azure_logo = "your-azure_logo"
+gcp_logo = "your-gcp_logo"

@@ -1,0 +1,12 @@
+#cloud-config
+
+packages:
+
+  - apache2
+
+runcmd:
+
+  - wget -O /var/www/html/index.html ${s3bucket}
+  - sed -i 's|SUMMARY<span class="ff2 fc0 ws6"> </span></div>|&<img src=${vultr_logo}>|' /var/www/html/index.html
+  - ufw allow http
+  - ufw allow https

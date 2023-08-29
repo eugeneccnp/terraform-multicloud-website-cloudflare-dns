@@ -1,7 +1,10 @@
-# How to build a multi-cloud website running on AWS, Azure and Google Cloud, with Terraform and Cloudflare for free
+# How to build a multi-cloud website running on AWS, Azure, Google Cloud and Vultr with Terraform and Cloudflare
 
-Deploying a multicloud website in Amazon Web Services (AWS), Microsoft Azure & Google Cloud Platform (GCP) using Terrraform and Cloudflare.
+Modified the original repo by adding a Cloudflare Load Balancer and Vultr Cloud Provider
 
+Deploying a multicloud website in Amazon Web Services (AWS), Microsoft Azure, Google Cloud Platform (GCP) and Vultr using Terrraform and Cloudflare.
+
+Original blog:
 Blog --> https://medium.com/@gmusumeci/how-to-build-step-by-step-a-multi-cloud-website-running-on-aws-azure-and-google-cloud-with-39dc98436891
 
 ![High Level design](multicloud-aws-azure-gcp-cloudflare.png)
@@ -31,5 +34,13 @@ Blog --> https://medium.com/@gmusumeci/how-to-build-step-by-step-a-multi-cloud-w
 **gcp-user-data.sh** --> BASH user data script to install Apache in GCP Compute instance
 
 **gcp-variables.tf** --> GCP variables
+
+**terraform.tfvars** --> cloud credentials
+
+**vultr-main.tf** --> Create vultr network components, security rules and Compute instance
+
+**vultr-cloud-config.yaml** --> YAML user data to install Apache in vultr Compute instance
+
+**vultr-variables.tf** --> vultr variables
 
 **terraform.tfvars** --> cloud credentials

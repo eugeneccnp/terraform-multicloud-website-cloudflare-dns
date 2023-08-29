@@ -5,6 +5,10 @@ terraform {
       source  = "cloudflare/cloudflare"
       version = "~> 4.0"
     }
+    vultr = {
+      source = "vultr/vultr"
+      version = "2.15.1"
+    }
   }
 }
 # Define Cloudflare provider
@@ -43,6 +47,15 @@ resource "cloudflare_record" "gcp-www" {
   depends_on = [google_compute_address.gcp-web-ip]
 }
 
+# Create www record for vultr
+resource "cloudflare_record" "vultr-www" {
+  zone_id          = var.cloudflare_zone_id
+  name             = "www"
+  value             = vultr_instance.my_instance.main_ip
+  type               = "A"
+  proxied         = true
+}
+
 # Create root record for Amazon Web Services
 resource "cloudflare_record" "aws-root" {
   zone_id    = var.cloudflare_zone_id
@@ -73,7 +86,16 @@ resource "cloudflare_record" "gcp-root" {
   depends_on = [google_compute_address.gcp-web-ip]
 }
 
+# Create root record for vultr
+resource "cloudflare_record" "vultr-root" {
+  zone_id    = var.cloudflare_zone_id
+  name       = "@"
+  value      = vultr_instance.my_instance.main_ip
+  type       = "A"
+  proxied    = true
+}
 
+# Create cloudflare load balancer
 resource "cloudflare_load_balancer" "demo_lb" {
   zone_id          = var.cloudflare_zone_id
   name             = cloudflare_record.aws-root.hostname
@@ -83,6 +105,7 @@ resource "cloudflare_load_balancer" "demo_lb" {
   proxied          = true
 }
 
+# Create cloudflare load balancer pool
 resource "cloudflare_load_balancer_pool" "demo_lb" {
   account_id = var.cloudflare_account_id
   name = "demo-lb-pool"
@@ -106,6 +129,12 @@ resource "cloudflare_load_balancer_pool" "demo_lb" {
     enabled = true
 
   }
+    origins {
+    name    = "vultr"
+    address = vultr_instance.my_instance.main_ip
+    enabled = true
+
+  }
   description        = "demo load balancer pool"
   enabled            = true
   minimum_origins    = 1
@@ -115,6 +144,7 @@ resource "cloudflare_load_balancer_pool" "demo_lb" {
   }
 }
 
+# Create cloudflare load balancer monitor
 resource "cloudflare_load_balancer_monitor" "demo_lb" {
   account_id     = var.cloudflare_account_id
   type           = "http"
@@ -184,4 +214,21 @@ output "cloudflare-gcp-root-record-id" {
 
 output "cloudflare-gcp-root-record-hostname" {
   value = cloudflare_record.gcp-root.hostname
+}
+
+# Output Vultr
+output "cloudflare-vultr-www-record-id" {
+  value = cloudflare_record.vultr-www.id
+}
+
+output "cloudflare-vultr-www-record-hostname" {
+  value = cloudflare_record.vultr-www.hostname
+}
+
+output "cloudflare-vultr-root-record-id" {
+  value = cloudflare_record.vultr-root.id
+}
+
+output "cloudflare-vultr-root-record-hostname" {
+  value = cloudflare_record.vultr-root.hostname
 }

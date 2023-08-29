@@ -21,7 +21,7 @@ variable "ssh_source" {
   default     = "0.0.0.0/0"
 }
 
-# AWS s3 bucket
+# AWS s3 bucket pointing to my resume
 variable "s3bucket" {
   type        = string
   description = "AWS s3bucket"
@@ -43,4 +43,10 @@ variable "azure_logo" {
 variable "gcp_logo" {
   type        = string
   description = "hosted on gcp logo used in resume demo"
+}
+
+# vultr logo
+variable "vultr_logo" {
+  type        = string
+  description = "hosted on Vultr logo used in resume demo"
 }

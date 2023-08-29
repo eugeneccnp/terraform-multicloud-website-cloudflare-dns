@@ -22,9 +22,14 @@ cloudflare_zone_id = "your-cloudflare_zone_id"
 cloudflare_account_id = "your-cloudflare_account_id"
 cloudflare_notification_email = "your-cloudflare_notification_email"
 
+#Vultr varaibles
+vultr_api_key = "your-vultr_api_key"
+
 # Common variables
 ssh_source = "your-ssh_source"
 s3bucket = "your-s3bucket"
 aws_logo = "your-aws_logo"
 azure_logo = "your-azure_logo"
 gcp_logo = "your-gcp_logo"
+vultr_logo = "your-vultr_logo"
+

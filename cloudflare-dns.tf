@@ -3,7 +3,7 @@ terraform {
   required_providers {
     cloudflare = {
       source  = "cloudflare/cloudflare"
-      version = "~> 4.0"
+      version = "~> 4.13.0"
     }
     vultr = {
       source = "vultr/vultr"
@@ -103,6 +103,11 @@ resource "cloudflare_load_balancer" "demo_lb" {
   default_pool_ids = [cloudflare_load_balancer_pool.demo_lb.id]
   description      = "demo_lb load balancer"
   proxied          = true
+  session_affinity = "cookie"
+  steering_policy  = "least_outstanding_requests"
+  session_affinity_attributes {
+      zero_downtime_failover = "sticky"
+  }
 }
 
 # Create cloudflare load balancer pool

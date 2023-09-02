@@ -6,16 +6,16 @@ provider "azurerm" {
 # Define bootstrap file
 data "template_file" "azure_user_data" {
   template = file("azure-user-data.sh")
-    vars = {
-      s3bucket = var.s3bucket
-      azure_logo = var.azure_logo
+  vars = {
+    s3bucket   = var.s3bucket
+    azure_logo = var.azure_logo
 
   }
 }
 
 #Create Resource Group
 resource "azurerm_resource_group" "azure-rg" {
-  name = "${var.app_name}-${var.app_environment}-rg"
+  name     = "${var.app_name}-${var.app_environment}-rg"
   location = var.rg_location
 }
 
@@ -35,7 +35,7 @@ resource "azurerm_subnet" "azure-subnet" {
   name                 = "${var.app_name}-${var.app_environment}-subnet"
   resource_group_name  = azurerm_resource_group.azure-rg.name
   virtual_network_name = azurerm_virtual_network.azure-vnet.name
-  address_prefixes       = var.azure_subnet_cidr
+  address_prefixes     = var.azure_subnet_cidr
 }
 
 #Create Security Group to access Web Server
@@ -66,7 +66,7 @@ resource "azurerm_network_security_group" "azure-web-nsg" {
     protocol                   = "Tcp"
     source_port_range          = "*"
     destination_port_range     = "22"
-    source_address_prefix      =  var.ssh_source
+    source_address_prefix      = var.ssh_source
     destination_address_prefix = "*"
   }
   tags = {
@@ -94,9 +94,9 @@ resource "azurerm_public_ip" "azure-web-ip" {
 
 #Create Network Card for Web Server VM
 resource "azurerm_network_interface" "azure-web-nic" {
-  name                      = "${var.app_name}-${var.app_environment}-web-nic"
-  location                  = azurerm_resource_group.azure-rg.location
-  resource_group_name       = azurerm_resource_group.azure-rg.name
+  name                = "${var.app_name}-${var.app_environment}-web-nic"
+  location            = azurerm_resource_group.azure-rg.location
+  resource_group_name = azurerm_resource_group.azure-rg.name
 
   ip_configuration {
     name                          = "internal"
@@ -113,12 +113,12 @@ resource "azurerm_network_interface" "azure-web-nic" {
 
 # Create web server vm
 resource "azurerm_virtual_machine" "azure-web-vm" {
-  name                  = "${var.app_name}-${var.app_environment}-web-vm"
-  location              = azurerm_resource_group.azure-rg.location
-  resource_group_name   = azurerm_resource_group.azure-rg.name
-  network_interface_ids = [azurerm_network_interface.azure-web-nic.id]
-  vm_size               = "Standard_B1s"
-  delete_os_disk_on_termination = true
+  name                             = "${var.app_name}-${var.app_environment}-web-vm"
+  location                         = azurerm_resource_group.azure-rg.location
+  resource_group_name              = azurerm_resource_group.azure-rg.name
+  network_interface_ids            = [azurerm_network_interface.azure-web-nic.id]
+  vm_size                          = "Standard_B1s"
+  delete_os_disk_on_termination    = true
   delete_data_disks_on_termination = true
 
 
@@ -140,7 +140,7 @@ resource "azurerm_virtual_machine" "azure-web-vm" {
     computer_name  = var.linux_vm_hostname
     admin_username = var.azure_linux_admin_user
     admin_password = var.azure_linux_admin_password
-     custom_data = data.template_file.azure_user_data.rendered
+    custom_data    = data.template_file.azure_user_data.rendered
   }
 
 

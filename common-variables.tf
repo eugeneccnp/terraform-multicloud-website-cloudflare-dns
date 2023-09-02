@@ -2,16 +2,16 @@
 
 # Define application name
 variable "app_name" {
-  type = string
+  type        = string
   description = "Application name"
-  default = "eugeneccnp"
+  default     = "eugeneccnp"
 }
 
 # Define application environment
 variable "app_environment" {
-  type = string
+  type        = string
   description = "Application environment"
-  default = "demo"
+  default     = "demo"
 }
 
 # Disable Firewall public access

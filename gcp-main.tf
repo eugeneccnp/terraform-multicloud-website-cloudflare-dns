@@ -14,10 +14,10 @@ provider "google" {
 
 # Define bootstrap file
 data "template_file" "gcp_user_data" {
-    template = file("gcp-user-data.sh")
-    vars = {
-      s3bucket = var.s3bucket
-      gcp_logo = var.gcp_logo
+  template = file("gcp-user-data.sh")
+  vars = {
+    s3bucket = var.s3bucket
+    gcp_logo = var.gcp_logo
   }
 }
 
@@ -44,8 +44,8 @@ resource "google_compute_firewall" "gcp-allow-http" {
     protocol = "tcp"
     ports    = ["80"]
   }
-  source_ranges = ["0.0.0.0/0"]  # Allow traffic from any IP address
-  target_tags = ["http"]
+  source_ranges = ["0.0.0.0/0"] # Allow traffic from any IP address
+  target_tags   = ["http"]
 }
 
 # Firewall allow ssh
@@ -56,8 +56,8 @@ resource "google_compute_firewall" "gcp-allow-ssh" {
     protocol = "tcp"
     ports    = ["22"]
   }
-  source_ranges = [var.ssh_source]  # Allow traffic from a specific subnet
-  target_tags = ["ssh"]
+  source_ranges = [var.ssh_source] # Allow traffic from a specific subnet
+  target_tags   = ["ssh"]
 }
 
 # Create a public ip for web server
@@ -72,7 +72,7 @@ resource "google_compute_instance" "gpc-web-server" {
   name         = "${var.app_name}-${var.app_environment}-web-server"
   machine_type = "f1-micro"
   zone         = var.gcp_zone
-  tags         = ["ssh","http"]
+  tags         = ["ssh", "http"]
 
   boot_disk {
     initialize_params {
@@ -91,8 +91,8 @@ resource "google_compute_instance" "gpc-web-server" {
   }
   #https://app.snyk.io/org/eugeneccnp/project/37d0aa26-6749-4c8f-bda3-79727fc861ed
   shielded_instance_config {
-    enable_secure_boot = true
-    enable_vtpm = true
+    enable_secure_boot          = true
+    enable_vtpm                 = true
     enable_integrity_monitoring = true
   }
 }

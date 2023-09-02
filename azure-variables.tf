@@ -16,7 +16,7 @@ variable "azure_vnet_cidr" {
 
 # Subnet CIDR
 variable "azure_subnet_cidr" {
-  type    = list(string)
+  type        = list(string)
   description = "Subnet CIDR"
   default     = ["10.2.1.0/24"]
 }

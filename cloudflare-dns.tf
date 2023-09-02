@@ -6,7 +6,7 @@ terraform {
       version = "~> 4.13.0"
     }
     vultr = {
-      source = "vultr/vultr"
+      source  = "vultr/vultr"
       version = "2.15.1"
     }
   }
@@ -18,42 +18,13 @@ provider "cloudflare" {
 }
 
 # Create www record for Amazon Web Services
-resource "cloudflare_record" "aws-www" {
-  zone_id    = var.cloudflare_zone_id
-  name       = "www"
-  value      = aws_eip.aws-web-eip.public_ip
-  type       = "A"
-  proxied    = true
-  depends_on = [aws_eip.aws-web-eip]
-}
+resource "cloudflare_record" "www" {
+  zone_id = var.cloudflare_zone_id
+  name    = "www"
+  value   = cloudflare_record.aws-root.hostname
+  type    = "CNAME"
+  proxied = true
 
-# Create www record for Azure
-resource "cloudflare_record" "azure-www" {
-  zone_id    = var.cloudflare_zone_id
-  name       = "www"
-  value      = azurerm_public_ip.azure-web-ip.ip_address
-  type       = "A"
-  proxied    = true
-  depends_on = [azurerm_public_ip.azure-web-ip]
-}
-
-# Create www record for Google Cloud
-resource "cloudflare_record" "gcp-www" {
-  zone_id    = var.cloudflare_zone_id
-  name       = "www"
-  value      = google_compute_address.gcp-web-ip.address
-  type       = "A"
-  proxied    = true
-  depends_on = [google_compute_address.gcp-web-ip]
-}
-
-# Create www record for vultr
-resource "cloudflare_record" "vultr-www" {
-  zone_id          = var.cloudflare_zone_id
-  name             = "www"
-  value             = vultr_instance.my_instance.main_ip
-  type               = "A"
-  proxied         = true
 }
 
 # Create root record for Amazon Web Services
@@ -88,11 +59,11 @@ resource "cloudflare_record" "gcp-root" {
 
 # Create root record for vultr
 resource "cloudflare_record" "vultr-root" {
-  zone_id    = var.cloudflare_zone_id
-  name       = "@"
-  value      = vultr_instance.my_instance.main_ip
-  type       = "A"
-  proxied    = true
+  zone_id = var.cloudflare_zone_id
+  name    = "@"
+  value   = vultr_instance.my_instance.main_ip
+  type    = "A"
+  proxied = true
 }
 
 # Create cloudflare load balancer
@@ -103,19 +74,19 @@ resource "cloudflare_load_balancer" "demo_lb" {
   default_pool_ids = [cloudflare_load_balancer_pool.demo_lb.id]
   description      = "demo_lb load balancer"
   proxied          = true
-  session_affinity = "cookie"
-  steering_policy  = "least_outstanding_requests"
-  session_affinity_attributes {
-      zero_downtime_failover = "sticky"
-  }
+  #  session_affinity = "cookie"
+  #  steering_policy  = "least_outstanding_requests"
+  #  session_affinity_attributes {
+  #      zero_downtime_failover = "sticky"
+  #  }
 }
 
 # Create cloudflare load balancer pool
 resource "cloudflare_load_balancer_pool" "demo_lb" {
-  account_id = var.cloudflare_account_id
-  name = "demo-lb-pool"
+  account_id    = var.cloudflare_account_id
+  name          = "demo-lb-pool"
   check_regions = ["ENAM"]
-  monitor = cloudflare_load_balancer_monitor.demo_lb.id
+  monitor       = cloudflare_load_balancer_monitor.demo_lb.id
   origins {
     name    = "aws"
     address = aws_eip.aws-web-eip.public_ip
@@ -134,7 +105,7 @@ resource "cloudflare_load_balancer_pool" "demo_lb" {
     enabled = true
 
   }
-    origins {
+  origins {
     name    = "vultr"
     address = vultr_instance.my_instance.main_ip
     enabled = true
@@ -169,31 +140,13 @@ resource "cloudflare_load_balancer_monitor" "demo_lb" {
   follow_redirects = false
 }
 
-
-# Output AWS
-output "cloudflare-aws-www-record-id" {
-  value = cloudflare_record.aws-www.id
-}
-
-output "cloudflare-aws-www-record-hostname" {
-  value = cloudflare_record.aws-www.hostname
-}
-
+#Outputs
 output "cloudflare-aws-root-record-id" {
   value = cloudflare_record.aws-root.id
 }
 
 output "cloudflare-aws-root-record-hostname" {
   value = cloudflare_record.aws-root.hostname
-}
-
-# Output Azure
-output "cloudflare-azure-www-record-id" {
-  value = cloudflare_record.azure-www.id
-}
-
-output "cloudflare-azure-www-record-hostname" {
-  value = cloudflare_record.azure-www.hostname
 }
 
 output "cloudflare-azure-root-record-id" {
@@ -204,30 +157,12 @@ output "cloudflare-azure-root-record-hostname" {
   value = cloudflare_record.azure-root.hostname
 }
 
-# Output GCP
-output "cloudflare-gcp-www-record-id" {
-  value = cloudflare_record.gcp-www.id
-}
-
-output "cloudflare-gcp-www-record-hostname" {
-  value = cloudflare_record.gcp-www.hostname
-}
-
 output "cloudflare-gcp-root-record-id" {
   value = cloudflare_record.gcp-root.id
 }
 
 output "cloudflare-gcp-root-record-hostname" {
   value = cloudflare_record.gcp-root.hostname
-}
-
-# Output Vultr
-output "cloudflare-vultr-www-record-id" {
-  value = cloudflare_record.vultr-www.id
-}
-
-output "cloudflare-vultr-www-record-hostname" {
-  value = cloudflare_record.vultr-www.hostname
 }
 
 output "cloudflare-vultr-root-record-id" {

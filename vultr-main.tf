@@ -1,3 +1,5 @@
+# vultr-main.tf | Define Vultr Provider, Security Groups, Computer Instance
+
 # Initialize the Vultr Provider
 provider "vultr" {
   api_key = var.vultr_api_key

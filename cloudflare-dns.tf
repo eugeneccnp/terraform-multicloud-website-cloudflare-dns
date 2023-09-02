@@ -17,7 +17,7 @@ provider "cloudflare" {
   api_key = var.cloudflare_api_key
 }
 
-# Create www record for Amazon Web Services
+# Create www CNAME record pointing to root (Fixed all CF 522 errors)
 resource "cloudflare_record" "www" {
   zone_id = var.cloudflare_zone_id
   name    = "www"

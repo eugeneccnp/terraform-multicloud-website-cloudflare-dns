@@ -1,3 +1,5 @@
+# vultr-variables.tf | Variables for the Vultr module
+
 #VultrAWS authentication variables
 variable "vultr_api_key" {
   type        = string

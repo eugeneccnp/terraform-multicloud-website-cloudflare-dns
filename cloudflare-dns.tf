@@ -19,7 +19,7 @@ provider "cloudflare" {
 
 # Create www CNAME record pointing to root (Fixed all CF 522 errors)
 resource "cloudflare_record" "www" {
-  zone_id = var.cloudflare_zone_id
+  zone_id = terraform.workspace == "prod" ? var.cloudflare_zone_id : var.cloudflare_dev_zone_id
   name    = "www"
   value   = cloudflare_record.aws-root.hostname
   type    = "CNAME"
@@ -29,7 +29,7 @@ resource "cloudflare_record" "www" {
 
 # Create root record for Amazon Web Services
 resource "cloudflare_record" "aws-root" {
-  zone_id    = var.cloudflare_zone_id
+  zone_id    = terraform.workspace == "prod" ? var.cloudflare_zone_id : var.cloudflare_dev_zone_id
   name       = "@"
   value      = aws_eip.aws-web-eip.public_ip
   type       = "A"
@@ -39,7 +39,7 @@ resource "cloudflare_record" "aws-root" {
 
 # Create root record for Azure
 resource "cloudflare_record" "azure-root" {
-  zone_id    = var.cloudflare_zone_id
+  zone_id    = terraform.workspace == "prod" ? var.cloudflare_zone_id : var.cloudflare_dev_zone_id
   name       = "@"
   value      = azurerm_public_ip.azure-web-ip.ip_address
   type       = "A"
@@ -49,7 +49,7 @@ resource "cloudflare_record" "azure-root" {
 
 # Create root record for Google Cloud
 resource "cloudflare_record" "gcp-root" {
-  zone_id    = var.cloudflare_zone_id
+  zone_id    = terraform.workspace == "prod" ? var.cloudflare_zone_id : var.cloudflare_dev_zone_id
   name       = "@"
   value      = google_compute_address.gcp-web-ip.address
   type       = "A"
@@ -59,7 +59,7 @@ resource "cloudflare_record" "gcp-root" {
 
 # Create root record for vultr
 resource "cloudflare_record" "vultr-root" {
-  zone_id = var.cloudflare_zone_id
+  zone_id = terraform.workspace == "prod" ? var.cloudflare_zone_id : var.cloudflare_dev_zone_id
   name    = "@"
   value   = vultr_instance.my_instance.main_ip
   type    = "A"
@@ -68,7 +68,7 @@ resource "cloudflare_record" "vultr-root" {
 
 # Create cloudflare load balancer
 resource "cloudflare_load_balancer" "demo_lb" {
-  zone_id          = var.cloudflare_zone_id
+  zone_id          = terraform.workspace == "prod" ? var.cloudflare_zone_id : var.cloudflare_dev_zone_id
   name             = cloudflare_record.aws-root.hostname
   fallback_pool_id = cloudflare_load_balancer_pool.demo_lb.id
   default_pool_ids = [cloudflare_load_balancer_pool.demo_lb.id]

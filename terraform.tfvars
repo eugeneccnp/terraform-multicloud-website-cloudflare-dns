@@ -19,6 +19,7 @@ gcp_auth_file = "your-gcp_auth_file"
 cloudflare_email = "your-cloudflare_email"
 cloudflare_api_key = "your-cloudflare_api_key"
 cloudflare_zone_id = "your-cloudflare_zone_id"
+cloudflare_dev_zone_id = "your-cloudflare_dev_zone_id"
 cloudflare_account_id = "your-cloudflare_account_id"
 cloudflare_notification_email = "your-cloudflare_notification_email"
 
@@ -32,4 +33,3 @@ aws_logo = "your-aws_logo"
 azure_logo = "your-azure_logo"
 gcp_logo = "your-gcp_logo"
 vultr_logo = "your-vultr_logo"
-
